@@ -1,0 +1,27 @@
+{
+    "name": "pumiepe",
+    "version": "0.0.0",
+    "description": "Primitive and Uncomfortable MVC Implementation for Educational Purpose, Ehh",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
+    "authors": [
+        "peppierre <peppierre@gmail.com>"
+    ],
+    "main": "dist/pumiepe.min.js",
+    "keywords": [
+        "mvc",
+        "single page app",
+        "training",
+        "education"
+    ],
+    "dependencies": {
+        "jquery": "^1.7.0",
+        "handlebars": "^3.0.0"
+    },
+    "license": "MIT"
+}
