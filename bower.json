@@ -1,6 +1,6 @@
 {
     "name": "pumiepe",
-    "version": "0.0.0",
+    "version": "0.1.0",
     "description": "Primitive and Uncomfortable MVC Implementation for Educational Purpose, Ehh",
     "ignore": [
         "**/.*",

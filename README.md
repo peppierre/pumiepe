@@ -20,7 +20,7 @@ Or grab the [source](https://github.com/peppierre/pumiepe/dist/pumiepe.js) ([min
 
 Basic usage is as follows:
 
-    PUMIEPE();
+    PUMIEPE.route("<path>", "<template-name>");
 
 For advanced usage, see the documentation.
 

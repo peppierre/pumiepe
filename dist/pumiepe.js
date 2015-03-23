@@ -97,6 +97,12 @@ RouteConstant = function () {
 RouteConstant.ROUTE_PATH_INDEX = "/";
 RouteConstant.ROUTE_PATH_LOADING = "/loading";
 RouteConstant.ROUTE_PATH_ERROR = "/error";
+RouteConstant.ROUTE_TEMPLATEFILE_INDEX = "index.hbs";
+RouteConstant.ROUTE_TEMPLATEFILE_LOADING = "loading.hbs";
+RouteConstant.ROUTE_TEMPLATEFILE_ERROR = "error.hbs";
+RouteConstant.ROUTE_TEMPLATE_INDEX = "<h1>Application is running</h1>";
+RouteConstant.ROUTE_TEMPLATE_LOADING = "Loading... Please wait!";
+RouteConstant.ROUTE_TEMPLATE_ERROR = "<h1>{{code}} - {{name}}</h1><div>{{details}}</div>";
 RouteFactory = (function () {
     var
         Route,
@@ -169,7 +175,7 @@ RouteFactory = (function () {
             if (lookupMatchingRoute(RouteConstant.ROUTE_PATH_INDEX) === undefined) {
                 Public.facture(
                     RouteConstant.ROUTE_PATH_INDEX,
-                    "index.hbs"
+                    RouteConstant.ROUTE_TEMPLATEFILE_INDEX
                 );
             }
             startUpRoute(HashParser.normalize(root.location.hash));
@@ -236,6 +242,15 @@ RouteFactory = (function () {
         };
         setupView = function () {
             if (viewSource === null) {
+                if (viewPath === RouteConstant.ROUTE_TEMPLATEFILE_INDEX) {
+                    viewSource = Handlebars.compile(RouteConstant.ROUTE_TEMPLATE_INDEX);
+                }
+                if (viewPath === RouteConstant.ROUTE_TEMPLATEFILE_ERROR) {
+                    viewSource = Handlebars.compile(RouteConstant.ROUTE_TEMPLATE_ERROR);
+                }
+                if (viewPath === RouteConstant.ROUTE_TEMPLATEFILE_LOADING) {
+                    viewSource = Handlebars.compile(RouteConstant.ROUTE_TEMPLATE_LOADING);
+                }
                 return Promise.resolve(
                     $.ajax("/views/" + viewPath)
                 ).then(
@@ -243,7 +258,9 @@ RouteFactory = (function () {
                         viewSource = Handlebars.compile(result);
                     },
                     function (error) {
-                        Error.throw(404, "View is unavailable for " + viewPath, "Something unusual happend while getting relevant template. Please, contact to application owner!");
+                        if ((viewPath !== RouteConstant.ROUTE_TEMPLATEFILE_INDEX) && (viewPath !== RouteConstant.ROUTE_TEMPLATEFILE_ERROR) && (viewPath !== RouteConstant.ROUTE_TEMPLATEFILE_LOADING)) {
+                            Error.throw(404, "View is unavailable for " + viewPath, "Something unusual happend while getting relevant template. Please, contact to application owner!");
+                        }
                     }
                 );
             } else {
@@ -301,7 +318,7 @@ RouteFactory = (function () {
     };
     Public.facture(
         RouteConstant.ROUTE_PATH_ERROR,
-        "error.hbs",
+        RouteConstant.ROUTE_TEMPLATEFILE_ERROR,
         {
             onModel: function () {
                 return JSON.parse(Session.getItem(Error.STORAGE_VARIABLE_NAME));
@@ -310,7 +327,7 @@ RouteFactory = (function () {
     );
     Public.facture(
         RouteConstant.ROUTE_PATH_LOADING,
-        "loading.hbs"
+        RouteConstant.ROUTE_TEMPLATEFILE_LOADING
     );
     return Public;
 })();
@@ -329,7 +346,7 @@ PUMIEPE = function () {
 
 
     // Version.
-    PUMIEPE.VERSION = '0.0.0';
+    PUMIEPE.VERSION = '0.1.0';
 
     // Export to the root, which is probably `window`.
     root.PUMIEPE = new PUMIEPE();

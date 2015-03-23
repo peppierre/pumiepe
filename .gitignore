@@ -15,4 +15,4 @@ results/
 *.gz
 
 .idea/
-.editorconfig
+.DS_Store
