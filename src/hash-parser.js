@@ -1,7 +1,7 @@
 HashParser = function () {
 };
 HashParser.parseFromUrl = function (url) {
-    return url.split("#")[1];
+    return url.split("#")[1] || "/";
 };
 HashParser.parseHashesFromChangeEvent = function (event) {
     return {
