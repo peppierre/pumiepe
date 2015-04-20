@@ -283,12 +283,12 @@ RouteFactory = (function () {
             ).then(
                 function () {
                     $("body main").html(viewSource(model));
+                    __self.setupEventHandlers();
                 },
                 function (error) {
                     Error.throw(404, "Unable to navigate to route", "Something unusual happened while getting relevant model or template. Please, contact to application owner!");
                 }
             );
-            this.setupEventHandlers();
         };
         this.setupEventHandlers = function () {
             Consoler.log("Setup event handlers");
