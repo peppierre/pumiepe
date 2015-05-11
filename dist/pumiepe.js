@@ -340,7 +340,8 @@ PUMIEPE = function () {
         "Persistence": Persistence,
         "Session": Session,
         "showError": Error.throw,
-        "route": RouteFactory.facture
+        "route": RouteFactory.facture,
+        "navigateTo": RouteFactory.transitionTo
     };
 };
 
