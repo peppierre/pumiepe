@@ -91,10 +91,10 @@ RouteFactory = (function () {
     Route = function (view, routeConfig) {
         var
             __self,
+            environment,
             viewPath,
             viewSource,
             parsedSource,
-            model,
             beforeReceivingModel,
             onReceivingModel,
             afterReceivingModel,
@@ -105,7 +105,9 @@ RouteFactory = (function () {
         viewPath = view;
         viewSource = null;
         parsedSource = null;
-        model = {};
+        environment = {
+            model : {}
+        };
         beforeReceivingModel = function () {
             return true;
         };
@@ -134,12 +136,12 @@ RouteFactory = (function () {
                 }
             ).then(
                 function (result) {
-                    model = result;
-                    return __self.afterModel.apply(__self, [model]);
+                    environment.model = result;
+                    return __self.afterModel.apply(__self, [environment.model]);
                 }
             ).then(
                 function (result) {
-                    model = result;
+                    environment.model = result;
                     return true;
                 },
                 function (error) {
@@ -179,7 +181,7 @@ RouteFactory = (function () {
         this.onModel = onReceivingModel;
         this.afterModel = afterReceivingModel;
         this.navigateAway = function () {
-            this.setdownEventHandlers();
+            __self.setdownEventHandlers.call(environment);
         };
         this.navigateTo = function () {
             Promise.all(
@@ -189,8 +191,8 @@ RouteFactory = (function () {
                 ]
             ).then(
                 function () {
-                    $("body main").html(viewSource(model));
-                    __self.setupEventHandlers();
+                    $("body main").html(viewSource(environment.model));
+                    __self.setupEventHandlers.call(environment);
                 },
                 function (error) {
                     Error.throw(404, "Unable to navigate to route", "Something unusual happened while getting relevant model or template. Please, contact to application owner!");
@@ -209,7 +211,7 @@ RouteFactory = (function () {
             }
         }
     };
-    Route.unmutables = ["parameters", "view", "model", "navigateAway", "navigateTo"];
+    Route.unmutables = ["parameters", "view", "model", "environment", "navigateAway", "navigateTo"];
     Public = {
         transitionTo: function (hash) {
             root.location.replace(root.location.href.substr(0, root.location.href.indexOf(root.location.hash)) + "#" + hash);
