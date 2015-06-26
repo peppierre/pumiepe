@@ -213,7 +213,8 @@ RouteFactory = (function () {
         setupModel = function () {
             return new Promise(
                 function (fulfill, reject) {
-                    if (true) {
+                    var beforeModelResult = __self.beforeModel.apply(__self);
+                    if (beforeModelResult !== null && beforeModelResult !== false) {
                         fulfill(this);
                     } else {
                         reject();
@@ -221,11 +222,10 @@ RouteFactory = (function () {
                 }
             ).then(
                 function (result) {
-                    return __self.beforeModel.apply(__self);
-                }
-            ).then(
-                function (result) {
                     return __self.onModel.apply(__self, [__self.parameters]);
+                },
+                function () {
+                    Consoler.warn("Model pipeline supressed.");
                 }
             ).then(
                 function (result) {
@@ -349,7 +349,7 @@ PUMIEPE = function () {
 
 
     // Version.
-    PUMIEPE.VERSION = '0.1.5';
+    PUMIEPE.VERSION = '0.1.6';
 
     // Export to the root, which is probably `window`.
     root.PUMIEPE = new PUMIEPE();
